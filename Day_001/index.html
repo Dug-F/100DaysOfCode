@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" type="text/css" href="./styles/styles.css" />
+    <title>Simple OO 1</title>
+  </head>
+  <body>
+    <header></header>
+    <main>
+        <h1>Simple Object Orientation 1</h1>
+        <h2>Create simple object with property, set and retrieve value, manipulate with method</h2>
+
+        <p>Use 'create object' button to create the object using the constructor with the initial value.  This does <em>not</em> update the current pet type on the screen</em></p>
+        <p>Then use the 'Get current pet type' button to show the current contents of the object type property using the getter method.</p>
+        <p>Use the 'Set new pet type' button to update the object type property with a new value using the setter method.  This does <em>not</em> update the current pet type on the screen.</p>
+        <p>Use the 'Get current pet type' button again to display the updated object type using the getter.</p>
+        <p>Finally, use the 'What kind?' button to use the object 'kind' method to return a modified version of the type.</p>
+
+
+        <fieldset>
+            <input id='initial' type="text" placeholder="set initial pet type">
+            <button id="create">Create object</button>
+        </fieldset>
+
+        <fieldset>
+            <button id="getCurrent">Get current pet type</button>
+            <p id="current">No current pet object</p>
+        </fieldset>
+
+        <fieldset>
+            <input id="new" type="text" placeholder="set new pet type">
+            <button id="set">Set new pet type</button>
+        </fieldset>
+
+        <fieldset>
+            <button id="whatKind">What kind?</button>
+            <p id="kind"></p>
+        </fieldset>
+    </main>
+    <footer></footer>
+    <script src="./scripts/scripts.js"></script>
+  </body>
+</html>
