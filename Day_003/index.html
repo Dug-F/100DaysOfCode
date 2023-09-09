@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" type="text/css" href="./styles/styles.css" />
+    <title>Simple OO 1</title>
+  </head>
+  <body>
+    <header></header>
+    <main>
+        <h1>Simple Object Orientation 3</h1>
+        <h2>Modified the app from Simple Object Orientation 2 to use dependency injection to add flexibility.</h2>
+        <p>GenericPet, Cat and Dog inherit from Pet abstract base class.</p>
+        <p>The makeNoise function is now injected and allows the noise to be specified at run time.</p>
+        <p>From a user point of view the app looks the same as yesterday, but it is different under the hood.</p>
+
+        <ul>
+          <li>Enter a name and if you are creating a generic pet enter a species.</li>
+          <li>Then create the pet - either generic, dog or cat</li>
+          <li>Select the pet you want to interact with using the radio buttons</li>
+          <li>Generic pets use the makeNoise method from the Pet class</li>
+          <li>Generic Pets, Cats and Dogs are created with a makeNoise function which is injected at run time </li>
+          <li>(Only) Cats have a purr method</li>
+          <li>(Only) Dogs have a fetch method</li>
+        </ul>
+
+
+        <fieldset>
+            <input id='name' type="text" placeholder="Name">
+            <input id='species' type="text" placeholder="If not cat or dog, what species">
+            <button id="createGeneric">Create generic pet</button>
+            <button id="createDog">Create dog</button>
+            <button id="createCat">Create cat</button>
+        </fieldset>
+
+        <fieldset>
+            <fieldset>
+              <input id="selectGeneric" type="radio" name="petType" value="generic">Generic Pet
+              <input id="selectDog" type="radio" name="petType" value="dog">Dog
+              <input id="selectCat" type="radio" name="petType" value="cat">Cat
+            </fieldset>
+            <button id="makeNoise">Make noise</button>
+            <button id="purr">Purr</button>
+            <button id="fetch">Fetch</button>
+            <p id="status"></p>
+        </fieldset>
+
+    </main>
+    <footer></footer>
+    <script src="./scripts/scripts.js"></script>
+  </body>
+</html>
