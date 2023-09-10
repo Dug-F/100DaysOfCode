@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" type="text/css" href="./styles/styles.css" />
+    <title>Simple OO 1</title>
+  </head>
+  <body>
+    <header></header>
+    <main>
+        <h1>Simple Object Orientation 4</h1>
+        <h2>Modified the app from Simple Object Orientation 3 to explore the flexibility introduced by dependency injection.</h2>
+        <p>GenericPet, Cat and Dog still inherit from Pet abstract base class.</p>
+        <p>However, there are now more types of Cat and Dog. Each type of cat is a Cat and each type of dog is a Dog.</p>
+        <p>So it has avoided introducing a sub-class of Cat or Dog and instead the specific instances can be composed at runtime.</p>
+
+        <ul>
+          <li>Enter a name and if you are creating a generic pet enter a species.</li>
+          <li>Then create the pet - either generic, dog or cat</li>
+          <li>Select the pet you want to interact with using the radio buttons</li>
+          <li>Generic pets use the makeNoise method from the Pet class</li>
+          <li>All types of cat are created using a Cat class, so they can all purr.</li>
+          <li>All types of dog are created using a Dog class, so they can all fetch.</li>
+          <li>All pets are created with a makeNoise function which is injected at run time.</li>
+          <li>This allows re-use of makeNoise functions across pets, e.g. generic pets and cats may both be able to hiss, although no shared noises have yet been implemented.</li>
+          <li>(Only) Cats have a purr method</li>
+          <li>(Only) Dogs have a fetch method</li>
+        </ul>
+
+
+        <fieldset>
+            <input id='name' type="text" placeholder="Name">
+            <input id='species' type="text" placeholder="If not cat or dog, what species">
+            <button id="createGeneric">Create generic pet</button>
+            <button id="createDog">Create dog</button>
+            <button id="createAnnoyingDog">Create annoying dog</button>
+            <button id="createBigDog">Create big dog</button>
+            <button id="createCat">Create cat</button>
+            <button id="createKitten">Create kitten</button>
+            <button id="createAnnoyingCat">Create annoying cat</button>
+        </fieldset>
+
+        <fieldset>
+            <fieldset>
+              <input id="selectGeneric" type="radio" name="petType" value="generic">Generic Pet
+              <input id="selectDog" type="radio" name="petType" value="dog">Dog
+              <input id="selectAnnoyingDog" type="radio" name="petType" value="annoying dog">Annoying Dog
+              <input id="selectBigDog" type="radio" name="petType" value="big dog">Big Dog
+              <input id="selectCat" type="radio" name="petType" value="cat">Cat
+              <input id="selectKitten" type="radio" name="petType" value="kitten">Kitten
+              <input id="selectAnnoyingCat" type="radio" name="petType" value="annoying cat">Annoying Cat
+            </fieldset>
+            <button id="makeNoise">Make noise</button>
+            <button id="purr">Purr</button>
+            <button id="fetch">Fetch</button>
+            <p id="status"></p>
+        </fieldset>
+
+    </main>
+    <footer></footer>
+    <script src="./scripts/scripts.js"></script>
+  </body>
+</html>
