@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" type="text/css" href="./styles/styles.css" />
+    <title>Simple OO 5</title>
+  </head>
+  <body>
+    <header></header>
+    <main>
+        <h1>Simple Object Orientation 5</h1>
+        <h2>Refactor of the app from Simple Object Orientation 4 to replace radio buttons with select dropdowns.</h2>
+        <h2>The intention is to move towards implementing a factory pattern, but the code is not there yet.</h2>
+        <p>GenericPet, Cat and Dog inherit from Pet abstract base class.</p>
+        <p>The makeNoise function is injected and allows the noise to be specified at run time.</p>
+        <p>From a user point of view the app is similar to yesterday, but now has dropdowns to select the pet rather than radio buttons.</p>
+
+        <ul>
+          <li>Enter a name and if you are creating a generic pet enter a species.</li>
+          <li>Select the type of pet to create and then click the 'Create Pet' button.</li>
+          <li>The pets are of different types - either generic, dog or cat</li>
+          <li>Select the pet you want to interact with using the 'select a pet' select drowdown</li>
+          <li>Generic pets use the makeNoise method from the Pet class</li>
+          <li>Generic Pets, Cats and Dogs are created with a makeNoise function which is injected at run time </li>
+          <li>(Only) Cats have a purr method</li>
+          <li>(Only) Dogs have a fetch method</li>
+        </ul>
+
+
+        <fieldset>
+            <input id='name' type="text" placeholder="Name">
+            <input id='species' type="text" placeholder="If not cat or dog, what species">
+            <label for="createSelection">Select a pet:</label>
+            <select id="createSelection">
+              <!-- Options will be populated here -->
+            </select>
+            <button id="createPet">Create Pet</button>
+        </fieldset>
+
+        <fieldset>
+            <fieldset>
+              <label for="createActionSelection">Select a pet:</label>
+              <select id="createActionSelection">
+                <!-- Options will be populated here -->
+              </select>
+            </fieldset>
+            <button id="makeNoise">Make noise</button>
+            <button id="purr">Purr</button>
+            <button id="fetch">Fetch</button>
+            <p id="status"></p>
+        </fieldset>
+
+    </main>
+    <footer></footer>
+    <script src="./scripts/scripts.js"></script>
+  </body>
+</html>
