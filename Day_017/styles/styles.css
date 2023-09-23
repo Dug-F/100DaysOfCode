@@ -1,0 +1,140 @@
+body {
+    background: linear-gradient(135deg,  #1e81b0, #126e9b, #175f88);
+    color: #063970;
+}
+
+.flex-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.outer-container {
+    height: 100vh;
+    padding: 20px;
+}
+
+.inner-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    background-color: #eeeee4;
+    border: 4px solid black;
+    max-width: 900px;
+}
+
+#setup-container, #question-container {
+    flex-direction: column;
+    flex: 1;
+    min-width: 250px;
+    padding: 30px;
+}
+
+.flex-col {
+    flex-direction: column;
+}
+
+.flex-row {
+    flex-direction: row;
+}
+
+h1 {
+    /* margin-bottom: 20px; */
+    flex: 1;
+    min-width: 250px;
+    padding: 30px;
+    padding-bottom: 0;
+    text-align: center;
+}
+
+label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+#trivia_amount {
+    max-width: 70px;
+}
+
+#question-category {
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#question-text {
+    max-width: 80%;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* #next-step-container {
+    position: relative;
+    margin-top: 20px;
+} */
+
+#next-question {
+    margin-top: 20px;
+    position: relative;
+}
+
+#restart-quiz {
+    position: relative;
+}
+
+.hide {
+    display: none;
+}
+
+#answers {
+    max-width: 790px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.answers {
+    text-decoration: none;
+    background-color: #22155A;
+    height: 60px;
+    width: 370px;
+    vertical-align: middle;
+    border-radius: 5px;
+    color: #fff;
+    text-align: center;
+    display: table-cell;
+    font-size: 1.4em;
+    overflow: hidden;
+    line-height: 1em;
+    padding: 0px 5px;
+    box-shadow: 0px 5px 5px #000;
+}
+
+.answers.active {
+    background-image: linear-gradient(#4F428B,#22155A 5%);  
+}
+
+.answers.active:hover {
+    background-image: linear-gradient(#4F428B,#33266B 3%);
+    cursor: pointer;
+}
+
+.answers.active:active {
+    background-image: linear-gradient(#4F428B,#22155A 3%);
+    box-shadow: 0px 3px #000;
+    transform: translateY(2px);
+}
+
+#answers div {
+    max-width: 370px;
+    width: 100%;
+    display: inline-block;
+    margin: 0px 5px 4px 0px;
+}
+
+.correct {
+    background-color: green;
+}
+
+.incorrect {
+    background-color: red;
+}
