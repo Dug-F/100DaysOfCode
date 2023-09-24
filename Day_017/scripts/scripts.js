@@ -55,21 +55,33 @@
     //******************
 
     async function getToken() {
+        // get token from api so that it can subsequently be used in data fetches
         const token = await fetchFromApi(urls.token, tokenParms);
+
+        // save token to quizParms object for later use
         quizParms.token = token.token;
+
+        // enable the start button - the start button was disabled to prevent it being clicked until the token is received
         quizSelectionElements.start.disabled = false;
     }
 
     function setEventListeners() {
         quizSelectionElements.amount.addEventListener("input", (event) => {
+            // set the quizParms amount value to the entered amount
             quizParms.amount = event.target.value;
         })
 
         quizSelectionElements.category.addEventListener("change", (event) => {
-            event.target.value === "Any" ? delete quizParms.category : quizParms.category = event.target.value;
+          // set the quizParms category parameter to the selected value, unless it is the 'any' option,
+          // in which case remove the category parameter as no parameter is to be sent if the selection is 'any'
+          event.target.value === "Any"
+            ? delete quizParms.category
+            : (quizParms.category = event.target.value);
         });
 
         quizSelectionElements.difficulty.addEventListener("change", (event) => {
+            // set the quizParms difficulty parameter to the selected value, unless it is the 'any' option, 
+            // in which case remove the difficulty parameter as no parameter is to be sent if the selection is 'any'
             event.target.value === "Any" ? delete quizParms.difficulty : (quizParms.difficulty = event.target.value);
         });
 
@@ -89,6 +101,12 @@
         containerElements.question.classList.remove("hide");
         containerElements.inner.classList.remove("flex-row");
         containerElements.inner.classList.add("flex-col");
+
+        // hide the restart quiz button
+        quizQuestionElements.restartQuiz.classList.add( "hide" );
+
+        // show the next question button
+        quizQuestionElements.nextQuestion.classList.remove("hide");
     }
 
     function populateQuestion() {
@@ -103,49 +121,7 @@
         populateAnswersArray(question);
         for (answer of quizQuestionElements.answers) {
             answer.innerHTML = quizStatus.answers[parseInt(answer.dataset.index)];
-        }
-          
-    }
-
-    function checkAnswer(event) {
-        // disable further clicks on the answer buttons once an answer has been given
-        if (!quizStatus.eventListenersActive) {
-            return;
-        }
-        quizStatus.eventListenersActive = false;
-
-        const clickedIndex = event.target.dataset.index;
-        const correctAnswerIndex = quizStatus.correctAnswerIndex.toString();
-
-        quizQuestionElements.answers.forEach((answer) => {
-            // turn the correct answer green
-            if (answer.dataset.index === correctAnswerIndex) {
-            answer.classList.add("correct");
-            }
-
-            // marked the clicked answer as right or wrong
-            if (answer.dataset.index === clickedIndex) {
-                if (clickedIndex === correctAnswerIndex) {
-                    quizStatus.score++;
-                } else {
-                    answer.classList.add("incorrect");
-                }
-            }
-
-            // update the score on the screen
-            quizQuestionElements.score.textContent = `${quizStatus.score}/${ quizStatus.questionNumber + 1}`;
-
-            // make all the buttons inactive so that they no longer respond to hover, click etc.
-            answer.classList.remove("active");
-
-            if (quizStatus.questionNumber < quiz.questions.length - 1) {
-                // enable the next question button
-                quizQuestionElements.nextQuestion.style.visibility = "visible";
-            } else {
-                // enable the quiz again question button
-                quizQuestionElements.restartQuiz.style.visibility = "visible";
-            }
-        });
+        }  
     }
 
     function resetAnswersStatus() {
@@ -154,44 +130,6 @@
             answer.classList.add("active");
             answer.classList.remove("correct", "incorrect");
         });
-    }
-
-    function showNextQuestion() {
-        // enable event listeners on answer buttons
-        quizStatus.eventListenersActive = true;
-
-        // hide the next question button but keep it in the flow
-        quizQuestionElements.nextQuestion.style.visibility = "hidden";
-
-        // reset the answer button status
-        resetAnswersStatus();
-
-        quizStatus.questionNumber++;
-
-        // poulate the next question
-        populateQuestion();
-    }
-
-    function restartQuiz() {
-        // enable event listeners on answer buttons
-        quizStatus.eventListenersActive = true;
-
-        // hide the restart quiz button but keep it in the flow
-        quizQuestionElements.restartQuiz.style.visibility = "hidden";
-
-        // reset the answer button status
-        resetAnswersStatus();
-
-        containerElements.question.classList.add("hide");
-        containerElements.setup.classList.remove("hide");
-
-        // reset quiz status
-        quizStatus.questionNumber = 0;
-        quizStatus.score = 0;
-
-        // reset score on screen
-        // update the score on the screen
-        quizQuestionElements.score.textContent = "0";
     }
 
     // populate answers randomly into the answers array
@@ -218,9 +156,11 @@
     //**************************************
 
     async function start() {
-        // hide the next question and restart quiz buttons but keep them in the flow
+        // hide the next question button but keep in the flow
         quizQuestionElements.nextQuestion.style.visibility = "hidden";
-        quizQuestionElements.restartQuiz.style.visibility = "hidden";
+
+        // hide the restartQuiz button and remove from the flow to that it is not taking up space
+        quizQuestionElements.restartQuiz.classList.add('hide');
 
         // get questions from the api
         const data = await fetchFromApi(urls.quiz, quizParms);
@@ -232,6 +172,86 @@
         // fill in the questions
         populateQuestion();
      }
+
+    function checkAnswer(event) {
+        // disable further clicks on the answer buttons once an answer has been given
+        if (!quizStatus.eventListenersActive) {
+            return;
+        }
+        quizStatus.eventListenersActive = false;
+
+        // get the index for the button that was clicked
+        const clickedIndex = event.target.dataset.index;
+
+        // get the index for the correct answer
+        const correctAnswerIndex = quizStatus.correctAnswerIndex.toString();
+
+        quizQuestionElements.answers.forEach((answer) => {
+            // turn the correct answer green
+            if (answer.dataset.index === correctAnswerIndex) {
+                answer.classList.add("correct");
+            }
+
+            // marked the clicked answer as right or wrong
+            if (answer.dataset.index === clickedIndex) {
+                if (clickedIndex === correctAnswerIndex) {
+                    quizStatus.score++;
+                } else {
+                    answer.classList.add("incorrect");
+                }
+            }
+
+            // update the score on the screen
+            quizQuestionElements.score.textContent = `${quizStatus.score}/${ quizStatus.questionNumber + 1}`;
+
+            // make all the buttons inactive so that they no longer respond to hover, click etc.
+            answer.classList.remove("active");
+
+            if (quizStatus.questionNumber < quiz.questions.length - 1) {
+                // enable the next question button
+                quizQuestionElements.nextQuestion.style.visibility = "visible";
+            } else {
+                // show the quiz again question button and hide the next question button
+                quizQuestionElements.restartQuiz.classList.remove("hide");
+                quizQuestionElements.nextQuestion.classList.add("hide");
+            }
+        });
+    }
+
+    function showNextQuestion() {
+        // enable event listeners on answer buttons
+        quizStatus.eventListenersActive = true;
+
+        // hide the next question button but keep it in the flow
+        quizQuestionElements.nextQuestion.style.visibility = "hidden";
+
+        // reset the answer button status
+        resetAnswersStatus();
+
+        quizStatus.questionNumber++;
+
+        // poulate the next question
+        populateQuestion();
+    }
+
+    function restartQuiz() {
+        // enable event listeners on answer buttons
+        quizStatus.eventListenersActive = true;
+
+        // reset the answer button status
+        resetAnswersStatus();
+
+        containerElements.question.classList.add("hide");
+        containerElements.setup.classList.remove("hide");
+
+        // reset quiz status
+        quizStatus.questionNumber = 0;
+        quizStatus.score = 0;
+
+        // reset score on screen
+        // update the score on the screen
+        quizQuestionElements.score.textContent = "0";
+    }
 
     //**************************
     // executed on script load *

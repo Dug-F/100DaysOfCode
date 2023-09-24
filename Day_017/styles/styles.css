@@ -1,5 +1,7 @@
 body {
-    background: linear-gradient(135deg,  #1e81b0, #126e9b, #175f88);
+    /* background: linear-gradient(135deg,  #1e81b0, #126e9b, #175f88); */
+    background: linear-gradient(to top, #1e81b0, #4a9ac5, #76b3d9, #a2ccec, #cee5ff);
+
     color: #063970;
 }
 
@@ -67,17 +69,8 @@ label {
     margin-bottom: 20px;
 }
 
-/* #next-step-container {
-    position: relative;
+#next-question, #restart-quiz {
     margin-top: 20px;
-} */
-
-#next-question {
-    margin-top: 20px;
-    position: relative;
-}
-
-#restart-quiz {
     position: relative;
 }
 
