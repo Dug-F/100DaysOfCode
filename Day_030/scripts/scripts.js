@@ -10,7 +10,6 @@ const elements = {
 
 const radius = 200;
 const centre = document.querySelector("#centre");
-const blankBubbles = ["", "", "", "", "", "", "", "", "", "", "", ""]
 const allNotes = [ "C", "G", "D", "A", "E", "B", "F♯/G♭", "C♯/D♭", "G♯/A♭", "D♯/E♭", "A♯/B♭", "F"];
 const majRoman = [ "I", "V", "ii", "vi", "iii", "vii", "", "", "", "", "", "IV"];
 const allIntervals = ["Root", "Perfect 5th", "Major 2nd", "Major 6th", "Major 3rd", "Major 7th", "Tritone/Flat 5th", "Minor 2nd", "Minor 6th", "Minor 3rd", "Minor 7th", "Perfect 4th"];
@@ -128,21 +127,6 @@ const rotateNote = (clickedElem) => {
   })
 }
 
-const hideBubbles = (className) => {
-  document.querySelectorAll(`.${className}.bubble`).forEach((bubble) => {
-    bubble.classList.add('hidden');
-  })
-}
-
-const unhideBubble = (className, position) => {
-  const bubble = document.querySelector(`.${className}.bubble[data-position='${position}']`);
-  bubble.classList.remove('hidden');
-}
-
-const getBubbleByPosition = (className, position) => {
-  return document.querySelector(`.${className}.bubble[data-position='${position}']`);
-}
-
 // rotates the clicked on bubble to the base position.
 // Rotates the entire circle structure of arms, connectors and bubbles that match the type of the clicked on bubble
 const rotateLabel = (clickedElem) => {
@@ -226,32 +210,18 @@ function createSVGLine(x1, y1, x2, y2) {
 
 // }
 
-// draw and labelchord shapes
+// draw chord shapes
 function drawChordLines(container, pattern, startPosition=0) {
   // container (element) is the svg container element
-  // pattern is an array of intervals to define which nodes to join
+  // pattern is an array to define which nodes to join
   if (!pattern) {
     return;
   }
   
-  // offset is an offset from the 0 position to apply to the lines/labels
-  // so that the chord shape does not necessarily start at the 0 position
   const offset = parseInt(startPosition);
-  // for each interval in the chord pattern
-  pattern.forEach((startInterval, index) => {
-    // set the line start point by converting the current interval to a circle position
-    startPoint = intervalToPosition(startInterval);
-    // set the line end interval to either the next interval in the pattern, 
-    // or the first interval if the current interval is the last one
-    const endInterval = index < pattern.length - 1 ? pattern[index + 1] : pattern[0];
-    // set the line end point by converting the end interval to a circle position
-    const endPoint = intervalToPosition(endInterval);
-    // draw a line between the start point and the end point
-    drawLine(container, (startPoint + offset) % 12, (endPoint + offset) % 12);
-    // get the chord label bubble, unhide and set the label
-    const bubble = getBubbleByPosition('innerLabel', (startPoint + offset) % 12)
-    bubble.textContent = startInterval;
-    bubble.classList.remove('hidden');
+  pattern.forEach((startPoint, index) => {
+    const endPoint = index < pattern.length - 1 ? pattern[index + 1] : pattern[0];
+    drawLine(container, (startPoint + offset) % 12, (endPoint + offset) % 12)
   })
 
 }
@@ -270,8 +240,6 @@ circleStatus.setTotalNodes(allNotes);
 createArmNode(centre, "note", allNotes);
 addClickEvents("note", rotateNote);
 createArmNode(centre, "label", getCurrentLabels());
-createArmNode(centre, "innerLabel", allNotes);
-hideBubbles('innerLabel');
 
 addContextClickEvents();
 

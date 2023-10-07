@@ -150,7 +150,6 @@ const callbackChords = (event) => {
   event.preventDefault();
 
   clearCanvas(svgContainer);
-  hideBubbles('innerLabel');
 
   if (circleStatus.contextSubmenuVisible) {
     return;

@@ -1,8 +1,15 @@
+import { circleStatus, getCurrentLabelTypes, getDefaultLabels, 
+  getCurrentLabels, getCurrentScales, getCurrentChordShapeTypes, 
+  getDefaultChordType, getBubble } from "./dataStructure.js";
+import { updatePositionNumber, populateBubbles } from "./helperFunctions.js";
+import { rotateLabel } from "./rotations.js";
+import { drawChords } from "./drawChords.js";
+
 const contextMenu = document.querySelector("#contextMenu");
 const contextSubmenu = document.querySelector("#contextSubmenu");
 const tickSymbol = String.fromCharCode(0x2713);
 
-const submenus = new Set(["Label type", "Labels"]);
+export const submenus = new Set(["Label type", "Labels", "Chord type"]);
 
 //****************
 //* context menu *
@@ -23,7 +30,7 @@ const removeLineItems = (event, parent) => {
 };
 
 // handles initial right click and builds context menu
-const handleContextClick = (event) => {
+export const handleContextClick = (event) => {
   event.preventDefault();
   showContextMenu(event);
 
@@ -41,7 +48,9 @@ const handleContextClick = (event) => {
   createContextMenuItem("Make tonic", parent, event);
   createContextMenuItem("Label type", parent, event, "", ">");
   createContextMenuItem("Labels", parent, event, "", ">");
-  createContextMenuItem("Chords", parent, event);
+  createContextMenuItem("Chord type", parent, event, "", ">");
+  createContextMenuItem("Show chord", parent, event);
+  
 };
 
 //*******************
@@ -49,13 +58,13 @@ const handleContextClick = (event) => {
 //*******************
 
 // hide the context submenu
-const hideContextSubmenu = () => {
+export const hideContextSubmenu = () => {
   contextSubmenu.classList.add("hidden");
   circleStatus.contextSubmenuVisible = false;
 };
 
 // show the context submenu
-const showContextSubmenu = () => {
+export const showContextSubmenu = () => {
   contextSubmenu.classList.remove("hidden");
   circleStatus.contextSubmenuVisible = true;
 };
@@ -119,7 +128,9 @@ const createContextMenuItem = (itemText, parent, event, shortcut = "", suffix = 
 const callbackMakeTonic = (event) => {
   const position = event.target.parentElement.dataset.position;
   const clickedElement = document.querySelector(`.label.bubble[data-position="${position}"]`);
-  updatePositionNumber(container, ".note-arm, .bubble.note", -Number(position));
+  updatePositionNumber(container, ".note-arm, .bubble.note, .connector", -Number(position));
+  circleStatus.currentChordShapeType = "No chord";
+  drawChords(position);
   rotateLabel(clickedElement);
 };
 
@@ -145,37 +156,50 @@ const callbackLabelType = (event) => {
   setContextSubmenuPosition(event);
 };
 
+// builds the chord types sub-menu line item
+const callbackChordType = (event) => {
+  event.preventDefault();
+
+  removeLineItems(event, contextSubmenu);
+
+  if (circleStatus.contextSubmenuVisible) {
+    return;
+  }
+  const parent = contextSubmenu.querySelector("ul");
+
+  // add the 'No chords' menu option
+  const tick = circleStatus.currentChordShapeType === "No chord" ? tickSymbol : "";
+  const menuItem = createContextMenuItem("No chord", parent, event, "", tick);
+  menuItem.addEventListener("click", changeChordShapeType);
+
+  // circleStatus.currentScale = "Major";
+  for (let key in getCurrentChordShapeTypes()) {
+    // const menuItem = createContextMenuItem(key, parent, event);
+    const tick = key === circleStatus.currentChordShapeType ?  tickSymbol : "";
+    const menuItem = createContextMenuItem(key, parent, event, "", tick);
+    menuItem.classList.add("submenu");
+    menuItem.setAttribute("data-position", event.target.parentElement.dataset.position);
+    menuItem.addEventListener("click", changeChordShapeType);
+  }
+  setContextSubmenuPosition(event);
+};
+
 // builds the chord shapes sub-menu line item
 const callbackChords = (event) => {
   event.preventDefault();
-
-  clearCanvas(svgContainer);
-  hideBubbles('innerLabel');
 
   if (circleStatus.contextSubmenuVisible) {
     return;
   }
 
   const position = event.target.parentElement.dataset.position;
-  const scale = circleStatus.currentScale;
-  const chordShapeType = circleStatus.currentChordShapeType;
-  chordShape = chordPatternsInScale[chordShapeType][scale][position];
-  const chordPattern = chordShapes[chordShapeType][chordShape];
-  drawChordLines(svgContainer, chordPattern, position);
-  // [circleStatus.currentScale][currentPosition]
-  // console.log(chordShape)
-  // drawChordLines(svgContainer, "MajTetrad");
-
-
-  // const parent = contextSubmenu.querySelector("ul");
-  // // circleStatus.currentScale = "Major";
-  // for (let key in getCurrentScales()) {
-  //   // const menuItem = createContextMenuItem(key, parent, event);
-  //   const menuItem = createContextMenuItem(key, parent, event);
-  //   menuItem.setAttribute("data-position", event.target.parentElement.dataset.position);
-  //   menuItem.addEventListener("click", changeLabels);
-  // }
-  // setContextSubmenuPosition(event);
+  if (circleStatus.currentChordShapeType === "No chord") {
+    circleStatus.currentChordShapeType = getDefaultChordType();
+    circleStatus.currentLabels = getDefaultLabels();
+    circleStatus.currentChordShape = "";
+  }
+  circleStatus.currentChordRootPosition = position;
+  drawChords(position);
 };
 
 // builds the intervals sub-menu line item
@@ -209,10 +233,20 @@ const changeLabelType = (event) => {
   populateBubbles("label", getCurrentLabels());
 };
 
+const changeChordShapeType = (event) => {
+  circleStatus.currentChordShapeType = event.target.innerText;
+
+  drawChords(event.target.parentElement.dataset.position);
+
+  // circleStatus.currentLabels = getDefaultLabels();
+  // populateBubbles("label", getCurrentLabels());
+};
+
 
 const contextCallbacks = {
   "Make tonic": callbackMakeTonic,
   "Label type": callbackLabelType,
   Labels: callbackLabels,
-  Chords: callbackChords
+  "Chord type": callbackChordType,
+  "Show chord": callbackChords,
 };
