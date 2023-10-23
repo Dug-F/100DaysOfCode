@@ -34,17 +34,20 @@ h1 {
 .cards-container {
   display: grid;
   align-items: center;
-  justify-content: left;
+  justify-content: space-evenly;
   grid-template-rows: repeat(4, 25%);
   grid-template-columns: repeat(13, 6.5%);
   gap: 12px;
   margin-left: 20px;
+  background-color: yellow;
+  margin: 10px;
 }
 
 .scores-container {
   display: grid;
   align-items: center;
   justify-content: center;
+  background-color: pink;
 }
 
 .scores {
@@ -58,9 +61,18 @@ h1 {
 }
 
 .card {
-  width: 100%;
+  flex: 1 0 calc(100% * 0.7);
+  max-width: calc(100% * 0.7);
+  /* flex-basis: 7.5%; */
+  /* width: 100%; */
+  /* width: 50px; */
   border-radius: 5px;
   /* opacity: 0; */
+}
+
+.card img {
+  max-width: 100%; /* Ensure the image doesn't exceed the width of its parent (the card) */
+  height: auto; /* Maintain the image's aspect ratio */
 }
 
 .fade {
